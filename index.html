@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2910/2910795.png">
 
     <title>C & E CONTABILIDADE - Gestão de Licenças Sanitárias</title>
+    <!-- Mantemos o CDN do Tailwind para simplificar o CSS sem precisar de postcss.config local complexo neste momento -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -31,9 +32,8 @@
       body { 
         font-family: 'Inter', sans-serif; 
         background-color: #f3f4f6; 
-        overscroll-behavior-y: none; /* Previne o efeito de 'bounce' no pull-to-refresh nativo */
+        overscroll-behavior-y: none;
       }
-      /* Ajuste para safe-areas no iPhone (notch) */
       .safe-top {
         padding-top: env(safe-area-inset-top);
       }
@@ -44,20 +44,24 @@
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
     "recharts": "https://aistudiocdn.com/recharts@^3.5.0",
-    "jspdf": "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/+esm",
-    "jspdf-autotable": "https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/+esm",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/package/xlsx.mjs"
+    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.4",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "xlsx": "https://aistudiocdn.com/xlsx@^0.18.5",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^5.0.2"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
+    <!-- Script de entrada para o Vite -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
