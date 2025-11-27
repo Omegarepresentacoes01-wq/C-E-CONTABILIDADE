@@ -1,4 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 import { Company, License } from "../types";
 
 // A API key deve ser obtida exclusivamente da variável de ambiente process.env.API_KEY
