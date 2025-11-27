@@ -1,7 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { Company, License } from "../types";
 
-// Initialize the SDK with the API key from environment variables
+// A API key deve ser obtida exclusivamente da variável de ambiente process.env.API_KEY
+// Assumimos que esta variável está pré-configurada e válida.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateEmailDraft = async (
@@ -21,7 +22,8 @@ export const generateEmailDraft = async (
       - Data de Vencimento: ${expirationDate}
       - Dias restantes: ${daysRemaining}
       
-      O objetivo é informar que a licença vai vencer em breve (ou já venceu, se dias restantes for negativo) e que precisamos iniciar o processo de renovação urgente para evitar multas.
+      O objetivo é informar que a licença vai vencer em breve (ou já venceu, se dias restantes for negativo) 
+      e que precisamos iniciar o processo de renovação urgente para evitar multas.
       Solicite que entrem em contato para providenciar a documentação.
       
       Retorne APENAS o corpo do e-mail. Não inclua o assunto no corpo.
@@ -40,28 +42,30 @@ export const generateEmailDraft = async (
 };
 
 export const askContextAwareAssistant = async (
-  question: string, 
-  data: { companies: Company[], licenses: License[] }
+  question: string,
+  data: { companies: Company[]; licenses: License[] }
 ): Promise<string> => {
   try {
-    // Preparar resumo dos dados para o contexto
-    const companiesContext = data.companies.map(c => ({
+    const companiesContext = data.companies.map((c) => ({
       id: c.id,
       name: c.name,
       cnpj: c.cnpj,
-      city: c.city
+      city: c.city,
     }));
 
-    const licensesContext = data.licenses.map(l => ({
+    const licensesContext = data.licenses.map((l) => ({
       companyId: l.companyId,
       number: l.number,
-      authority: l.authority, // Aqui pode entrar Alvará, CND, Licença
+      authority: l.authority, // Alvará, CND, Licença etc.
       issueDate: l.issueDate,
       expirationDate: l.expirationDate,
-      notes: l.notes
+      notes: l.notes,
     }));
 
-    const contextString = JSON.stringify({ companies: companiesContext, documents: licensesContext });
+    const contextString = JSON.stringify({
+      companies: companiesContext,
+      documents: licensesContext,
+    });
 
     const prompt = `
       Você é o "C&E AI Advisor", um consultor especialista em contabilidade e legislação sanitária/empresarial.
@@ -75,7 +79,9 @@ export const askContextAwareAssistant = async (
       INSTRUÇÕES ESTRITAS:
       1. Você tem acesso total aos dados acima. Se o usuário perguntar sobre "minhas empresas", "vencimentos", "Alvarás" ou "CNDs", USE OS DADOS fornecidos para responder especificamente.
       2. O termo "documents" no JSON inclui Licenças Sanitárias, Alvarás de Funcionamento e Certidões Negativas (CNDs), dependendo do campo 'authority' ou 'notes'. 
-      3. Se o usuário pedir para verificar pendências, analise as datas de vencimento ('expirationDate') em relação à data de hoje (${new Date().toLocaleDateString('pt-BR')}).
+      3. Se o usuário pedir para verificar pendências, analise as datas de vencimento ('expirationDate') em relação à data de hoje (${new Date().toLocaleDateString(
+        "pt-BR"
+      )}).
       4. Se o usuário perguntar sobre Alvarás ou CNDs e não houver registros explícitos, avise que não encontrou esses documentos específicos cadastrados para a empresa citada e sugira o cadastro.
       5. Seja proativo: Se notar uma empresa sem nenhum documento, alerte.
       6. Mantenha o tom profissional, direto e em Português do Brasil.
@@ -89,12 +95,14 @@ export const askContextAwareAssistant = async (
 
     return response.text || "Não consegui processar os dados no momento.";
   } catch (error) {
-     console.error("Erro ao chamar Gemini API:", error);
-     return "Ocorreu um erro ao analisar os dados da sua contabilidade.";
+    console.error("Erro ao chamar Gemini API:", error);
+    return "Ocorreu um erro ao analisar os dados da sua contabilidade.";
   }
-}
+};
 
-// Deprecated simple function
-export const askRegulationQuestion = async (question: string): Promise<string> => {
-   return askContextAwareAssistant(question, { companies: [], licenses: [] });
-}
+// Função simples usando o mesmo assistente contextual
+export const askRegulationQuestion = async (
+  question: string
+): Promise<string> => {
+  return askContextAwareAssistant(question, { companies: [], licenses: [] });
+};
