@@ -1,11 +1,13 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import { GoogleGenAI } from "@google/genai";
 import { Company, License } from "../types";
 
-// A API key deve ser obtida exclusivamente da variável de ambiente process.env.API_KEY
-// Assumimos que esta variável está pré-configurada e válida.
+// Initialize the Google GenAI client using process.env.API_KEY as per strict guidelines.
+// This assumes process.env.API_KEY is available in the environment.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+// ----------------------
+// GERA EMAIL
+// ----------------------
 export const generateEmailDraft = async (
   companyName: string,
   licenseNumber: string,
@@ -31,10 +33,10 @@ export const generateEmailDraft = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: 'gemini-2.5-flash',
       contents: prompt,
     });
-
+    
     return response.text || "Não foi possível gerar o e-mail no momento.";
   } catch (error) {
     console.error("Erro ao chamar Gemini API:", error);
@@ -42,6 +44,9 @@ export const generateEmailDraft = async (
   }
 };
 
+// ----------------------
+// ASSISTENTE INTELIGENTE
+// ----------------------
 export const askContextAwareAssistant = async (
   question: string,
   data: { companies: Company[]; licenses: License[] }
@@ -80,9 +85,7 @@ export const askContextAwareAssistant = async (
       INSTRUÇÕES ESTRITAS:
       1. Você tem acesso total aos dados acima. Se o usuário perguntar sobre "minhas empresas", "vencimentos", "Alvarás" ou "CNDs", USE OS DADOS fornecidos para responder especificamente.
       2. O termo "documents" no JSON inclui Licenças Sanitárias, Alvarás de Funcionamento e Certidões Negativas (CNDs), dependendo do campo 'authority' ou 'notes'. 
-      3. Se o usuário pedir para verificar pendências, analise as datas de vencimento ('expirationDate') em relação à data de hoje (${new Date().toLocaleDateString(
-        "pt-BR"
-      )}).
+      3. Se o usuário pedir para verificar pendências, analise as datas de vencimento ('expirationDate') em relação à data de hoje.
       4. Se o usuário perguntar sobre Alvarás ou CNDs e não houver registros explícitos, avise que não encontrou esses documentos específicos cadastrados para a empresa citada e sugira o cadastro.
       5. Seja proativo: Se notar uma empresa sem nenhum documento, alerte.
       6. Mantenha o tom profissional, direto e em Português do Brasil.
@@ -90,7 +93,7 @@ export const askContextAwareAssistant = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
