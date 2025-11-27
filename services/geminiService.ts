@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { Company, License } from "../types";
 
+// Initialize the SDK with the API key from environment variables
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateEmailDraft = async (
@@ -27,7 +28,7 @@ export const generateEmailDraft = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: "gemini-2.5-flash",
       contents: prompt,
     });
 
@@ -44,7 +45,6 @@ export const askContextAwareAssistant = async (
 ): Promise<string> => {
   try {
     // Preparar resumo dos dados para o contexto
-    // Filtramos campos desnecessários para economizar tokens e focamos no essencial
     const companiesContext = data.companies.map(c => ({
       id: c.id,
       name: c.name,
@@ -83,7 +83,7 @@ export const askContextAwareAssistant = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: "gemini-2.5-flash",
       contents: prompt,
     });
 
@@ -94,7 +94,7 @@ export const askContextAwareAssistant = async (
   }
 }
 
-// Deprecated simple function (kept for backward compatibility if needed, but UI now uses the one above)
+// Deprecated simple function
 export const askRegulationQuestion = async (question: string): Promise<string> => {
    return askContextAwareAssistant(question, { companies: [], licenses: [] });
 }
