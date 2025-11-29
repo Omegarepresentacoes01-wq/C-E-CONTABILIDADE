@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from '../types';
-import { LayoutDashboard, Building2, FileBadge, Bot, Menu, X, AlertTriangle, ArrowRight, Settings, FileText } from 'lucide-react';
+import { LayoutDashboard, Building2, FileBadge, Menu, X, AlertTriangle, ArrowRight, Settings, FileText } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface LayoutProps {
@@ -23,7 +23,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, setCurrentView, 
     { id: 'companies', label: 'Empresas', icon: Building2 },
     { id: 'licenses', label: 'Licenças', icon: FileBadge },
     { id: 'reports', label: 'Relatórios', icon: FileText },
-    { id: 'advisor', label: 'Assistente IA', icon: Bot },
     { id: 'settings', label: 'Configurações', icon: Settings },
   ];
 

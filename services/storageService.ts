@@ -6,73 +6,9 @@ const STORAGE_KEYS = {
   THEME: 'sanicontrol_theme',
 };
 
-// Mock Initial Data
-const INITIAL_COMPANIES: Company[] = [
-  {
-    id: '1',
-    name: 'Padaria Sabor do Trigo Ltda',
-    cnpj: '12.345.678/0001-90',
-    city: 'São Paulo',
-    contactName: 'João Silva',
-    email: 'joao@sabordotrigo.com.br',
-    phone: '(11) 99999-9999',
-  },
-  {
-    id: '2',
-    name: 'Restaurante Bom Paladar',
-    cnpj: '98.765.432/0001-10',
-    city: 'Campinas',
-    contactName: 'Maria Oliveira',
-    email: 'maria@bompaladar.com',
-    phone: '(19) 88888-8888',
-  },
-  {
-    id: '3',
-    name: 'Farmácia Saúde Total',
-    cnpj: '45.678.901/0001-23',
-    city: 'Santos',
-    contactName: 'Carlos Santos',
-    email: 'contato@saudetotal.com.br',
-    phone: '(13) 77777-7777',
-  },
-];
-
-const INITIAL_LICENSES: License[] = [
-  {
-    id: '101',
-    companyId: '1',
-    number: 'VISA-SP-2023-001',
-    issueDate: '2023-01-15',
-    expirationDate: '2024-01-15', // Expired
-    authority: 'Vigilância Sanitária Municipal',
-    notes: 'Renovação pendente de vistoria.',
-  },
-  {
-    id: '102',
-    companyId: '2',
-    number: 'VISA-CP-2023-882',
-    issueDate: '2023-06-20',
-    expirationDate: '2024-06-20', // Upcoming/Warning (depending on current date) or Expired
-    authority: 'Vigilância Sanitária Municipal',
-  },
-  {
-    id: '103',
-    companyId: '3',
-    number: 'ANVISA-AFE-2024',
-    issueDate: '2024-02-10',
-    expirationDate: '2025-02-10', // Active
-    authority: 'ANVISA',
-    notes: 'Autorização de Funcionamento',
-  },
-  {
-    id: '104',
-    companyId: '1',
-    number: 'CMVS-2024-XP',
-    issueDate: '2024-03-01',
-    expirationDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Warning (15 days from now)
-    authority: 'Prefeitura de SP',
-  }
-];
+// Dados Iniciais Vazios para Produção (Uso Real)
+const INITIAL_COMPANIES: Company[] = [];
+const INITIAL_LICENSES: License[] = [];
 
 export const getCompanies = (): Company[] => {
   const data = localStorage.getItem(STORAGE_KEYS.COMPANIES);
@@ -126,6 +62,13 @@ export const saveLicense = (license: License): void => {
 export const deleteLicense = (id: string): void => {
   const licenses = getLicenses().filter((l) => l.id !== id);
   localStorage.setItem(STORAGE_KEYS.LICENSES, JSON.stringify(licenses));
+};
+
+// System Management
+export const clearSystemData = (): void => {
+  localStorage.removeItem(STORAGE_KEYS.COMPANIES);
+  localStorage.removeItem(STORAGE_KEYS.LICENSES);
+  // Mantemos o tema para não quebrar a UX
 };
 
 // Backup System

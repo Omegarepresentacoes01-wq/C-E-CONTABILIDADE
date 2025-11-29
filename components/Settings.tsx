@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { createBackup, restoreBackup } from '../services/storageService';
-import { Download, Upload, ShieldCheck, Database, RefreshCw, Moon, Sun, Palette } from 'lucide-react';
+import { createBackup, restoreBackup, clearSystemData } from '../services/storageService';
+import { Download, Upload, ShieldCheck, Database, RefreshCw, Moon, Sun, Palette, Trash } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { PrimaryColor } from '../types';
 
@@ -48,6 +48,14 @@ const Settings: React.FC<SettingsProps> = ({ onDataRestored }) => {
     reader.readAsText(file);
     // Reset input
     event.target.value = '';
+  };
+
+  const handleResetSystem = () => {
+    if (confirm('TEM CERTEZA? Isso apagará TODAS as empresas e licenças cadastradas neste navegador. Esta ação é irreversível.')) {
+      clearSystemData();
+      onDataRestored();
+      alert('Sistema limpo com sucesso.');
+    }
   };
 
   const colorOptions: { id: PrimaryColor, label: string, bg: string }[] = [
@@ -163,6 +171,17 @@ const Settings: React.FC<SettingsProps> = ({ onDataRestored }) => {
             </button>
           </div>
         </div>
+
+         {/* Reset System Button */}
+         <div className="mt-4 flex justify-end">
+            <button 
+              onClick={handleResetSystem}
+              className="text-red-500 hover:text-red-600 dark:hover:text-red-400 text-sm font-medium flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+            >
+              <Trash className="w-4 h-4" />
+              Resetar Sistema (Limpar Tudo)
+            </button>
+         </div>
 
         <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mt-6">
           <div className="flex items-start gap-4">

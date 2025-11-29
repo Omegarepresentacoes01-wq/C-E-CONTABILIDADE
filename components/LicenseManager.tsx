@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Company, License, LicenseStatus } from '../types';
-import { Plus, Search, Trash2, Edit2, AlertCircle, Calendar, FileText, Send } from 'lucide-react';
+import { Plus, Search, Trash2, Edit2, AlertCircle, Calendar, FileText } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface LicenseManagerProps {
@@ -9,7 +9,6 @@ interface LicenseManagerProps {
   onAdd: (l: License) => void;
   onEdit: (l: License) => void;
   onDelete: (id: string) => void;
-  onDraftEmail: (company: Company, license: License) => void;
 }
 
 const LicenseManager: React.FC<LicenseManagerProps> = ({ 
@@ -18,7 +17,6 @@ const LicenseManager: React.FC<LicenseManagerProps> = ({
   onAdd, 
   onEdit, 
   onDelete,
-  onDraftEmail
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -213,13 +211,6 @@ const LicenseManager: React.FC<LicenseManagerProps> = ({
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end space-x-2">
-                          <button
-                            onClick={() => company && onDraftEmail(company, license)}
-                            className="p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md transition-colors"
-                            title="Gerar E-mail de Cobrança (IA)"
-                          >
-                            <Send className="w-4 h-4" />
-                          </button>
                           <button 
                             onClick={() => handleEdit(license)}
                             className={`p-1.5 hover:bg-gray-100 dark:hover:bg-slate-600 ${colors.text} dark:text-gray-300 rounded-md transition-colors`}

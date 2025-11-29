@@ -1,22 +1,24 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Company, License } from "../types";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+// As funcionalidades de IA foram removidas conforme solicitação.
+// Este arquivo é mantido apenas para evitar que imports antigos quebrem o build se existirem em outros arquivos não migrados.
 
-if (!apiKey) {
-  throw new Error("❌ ERRO: VITE_GEMINI_API_KEY não encontrada.");
+export const generateEmailDraft = async (
+  companyName: string,
+  licenseNumber: string,
+  expirationDate: string,
+  daysRemaining: number
+): Promise<string> => {
+    return "Funcionalidade de IA desativada.";
+};
+
+export const askContextAwareAssistant = async (
+  question: string, 
+  data: { companies: Company[], licenses: License[] }
+): Promise<string> => {
+    return "Funcionalidade de IA desativada.";
 }
 
-const genAI = new GoogleGenerativeAI(apiKey);
-
-export async function gerarTexto(prompt: string) {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const result = await model.generateContent(prompt);
-    return result.response.text();
-
-  } catch (error) {
-    console.error("Erro ao gerar conteúdo:", error);
-    throw error;
-  }
+export const askRegulationQuestion = async (question: string): Promise<string> => {
+   return "Funcionalidade de IA desativada.";
 }
